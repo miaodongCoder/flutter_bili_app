@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bili_app/http/core/hi_error.dart';
 import 'package:flutter_bili_app/http/core/hi_net.dart';
 import 'package:flutter_bili_app/http/request/base_request.dart';
 import 'package:flutter_bili_app/http/request/test_request.dart';
@@ -54,13 +55,19 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() async {
-    TestRequest request = TestRequest();
-    request.add("keyaaa", "aaa").add("keybbb", "bbb");
-    HiNet hiNet = HiNet.getInstance();
-    var response  = await hiNet.fire(request);
-    print('main: $response');
+    try {
+      TestRequest request = TestRequest();
+      request.add("keyaaa", "aaa").add("keybbb", "bbb");
+      var response = await HiNet.getInstance().fire(request);
+      print('main: $response');
+    } on NeedAuthor catch (e) {
+      print(e);
+    } on NeedLogin catch (e) {
+      print(e);
+    } on HiNetError catch (e) {
+      print(e);
+    }
 
-    
     setState(() {
       _counter++;
     });

@@ -32,7 +32,7 @@ abstract class BaseRequest {
       uri = Uri.http(authority(), pathStr, params);
     }
 
-    if(needLogin()) {
+    if (needLogin()) {
       // 给需要登录页的接口携带登录令牌:
     }
 
@@ -52,13 +52,9 @@ abstract class BaseRequest {
   }
 
   // 鉴权:
-  Map<String, dynamic> header = {
-    'course-flag': 'ZmEtMjAyMS0wNC0xMiAyMToyMjoyMC1mYQ==fa',
-    'auth-token': '课程首页获取的auth-token',
-    'boarding-pass':'登录成功返回的boarding-pass'
-  };
+  Map<String, dynamic> header = {'course-flag': 'ZmEtMjAyMS0wNC0xMiAyMToyMjoyMC1mYQ==fa', 'auth-token': '课程首页获取的auth-token', 'boarding-pass': '登录成功返回的boarding-pass'};
 
-  BaseRequest addHeader(String key , dynamic value) {
+  BaseRequest addHeader(String key, dynamic value) {
     params[key] = value.toString();
     return this;
   }
