@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/http/core/hi_error.dart';
 import 'package:flutter_bili_app/http/core/hi_net.dart';
-import 'package:flutter_bili_app/http/request/base_request.dart';
 import 'package:flutter_bili_app/http/request/test_request.dart';
+import 'package:flutter_bili_app/model/Owner.dart';
+import 'package:flutter_bili_app/model/result.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,7 +57,36 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       _counter++;
+      test();
     });
+  }
+
+  void test() {
+    // const jsonString = "{ \"name\": \"flutter\", \"url\": \"https://coding.imooc.com/class/487.html\" }";
+    // // JSON 转 Map:
+    // Map<String, dynamic> jsonMap = jsonDecode(jsonString);
+    // print('name: ${jsonMap["name"]}');
+    // print('url: ${jsonMap["url"]}');
+    // // Map 转 JSON:
+    // String json = jsonEncode(jsonMap);
+    // print("json: $json");
+
+    var ownerMap = {
+      "name": "名称!",
+      "face": "https://coding.imooc.com/class/487.html",
+      "fans": 0
+    };
+
+    Owner owner = Owner.fromJson(ownerMap);
+    print('${owner.name} , ${owner.face} , ${owner.fans}');
+
+    var resultJson = {
+      "code": 0,
+      "method": "GET",
+      "requestPrams": "requestPrams"
+    };
+    Result result = Result.fromJson(resultJson);
+    print("result = $result");
   }
 
   @override
