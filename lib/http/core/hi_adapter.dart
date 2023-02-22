@@ -11,11 +11,16 @@ abstract class HiNetAdapter {
 class HiNetResponse<T> {
   T data;
   BaseRequest request;
-  int statusCode;
+  int? statusCode;
   String? statusMessage;
   dynamic extra;
 
-  HiNetResponse({required this.data, required this.request, required this.statusCode, this.statusMessage, this.extra});
+  HiNetResponse(
+      {required this.data,
+      required this.request,
+      this.statusCode,
+      this.statusMessage,
+      this.extra});
 
   @override
   String toString() {
