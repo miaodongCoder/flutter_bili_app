@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bili_app/db/hi_cache.dart';
 import 'package:flutter_bili_app/http/core/hi_error.dart';
 import 'package:flutter_bili_app/http/core/hi_net.dart';
+import 'package:flutter_bili_app/http/dao/login_dao.dart';
+import 'package:flutter_bili_app/http/request/login_request.dart';
 import 'package:flutter_bili_app/http/request/test_request.dart';
 import 'package:flutter_bili_app/model/Owner.dart';
 import 'package:flutter_bili_app/model/result.dart';
@@ -38,57 +41,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() async {
-    TestRequest request = TestRequest();
-    request
-        .add("keyaaa", "aaa")
-        .add("keybbb", "bbb")
-        .add("requestPrams", "kkk");
-    try {
-      var response = await HiNet.getInstance().fire(request);
-      print('main: $response');
-    } on NeedAuthor catch (e) {
-      print(e);
-    } on NeedLogin catch (e) {
-      print(e);
-    } on HiNetError catch (e) {
-      print(e);
-    }
-
-    setState(() {
-      _counter++;
-      test();
-    });
-  }
-
-  void test() {
-    // const jsonString = "{ \"name\": \"flutter\", \"url\": \"https://coding.imooc.com/class/487.html\" }";
-    // // JSON 转 Map:
-    // Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-    // print('name: ${jsonMap["name"]}');
-    // print('url: ${jsonMap["url"]}');
-    // // Map 转 JSON:
-    // String json = jsonEncode(jsonMap);
-    // print("json: $json");
-
-    var ownerMap = {
-      "name": "名称!",
-      "face": "https://coding.imooc.com/class/487.html",
-      "fans": 0
-    };
-
-    Owner owner = Owner.fromJson(ownerMap);
-    print('${owner.name} , ${owner.face} , ${owner.fans}');
-
-    var resultJson = {
-      "code": 0,
-      "method": "GET",
-      "requestPrams": "requestPrams"
-    };
-    Result result = Result.fromJson(resultJson);
-    print("result = $result");
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,5 +67,44 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void _incrementCounter() async {
+    testLogin();
+    setState(() {
+      _counter++;
+    });
+  }
+
+  void test() {
+    var ownerMap = {
+      "name": "名称!",
+      "face": "https://coding.imooc.com/class/487.html",
+      "fans": 0
+    };
+
+    Owner owner = Owner.fromJson(ownerMap);
+    print('${owner.name} , ${owner.face} , ${owner.fans}');
+
+    var resultJson = {
+      "code": 0,
+      "method": "GET",
+      "requestPrams": "requestPrams"
+    };
+    Result result = Result.fromJson(resultJson);
+    print("result = $result");
+  }
+
+  void testLogin() async {
+    try {
+      var register = await LoginDao.registration("222", "222", "3926757", "8902");
+      print("main- 注册 $register");
+      // var login = await LoginDao.login("111", "111");
+      // print(login);
+    } on NeedLogin catch (e) {
+      print(e);
+    } on HiNetError catch (e) {
+      print(e);
+    }
   }
 }

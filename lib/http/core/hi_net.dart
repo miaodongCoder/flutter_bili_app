@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/http/core/dio_adapter.dart';
 import 'package:flutter_bili_app/http/core/hi_error.dart';
-import 'package:flutter_bili_app/http/core/mock_adapter.dart';
 import 'package:flutter_bili_app/http/request/base_request.dart';
 import 'hi_adapter.dart';
 

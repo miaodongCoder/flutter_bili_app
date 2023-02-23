@@ -53,7 +53,8 @@ abstract class BaseRequest {
 
   // 鉴权:
   Map<String, dynamic> header = {
-    'course-flag': 'ZmEtMjAyMS0wNC0xMiAyMToyMjoyMC1mYQ==fa'
+    'course-flag': 'fa',
+    'auth-token': 'ZmEtMjAyMS0wNC0xMiAyMToyMjoyMC1mYQ==fa',
   };
 
   BaseRequest addHeader(String key, dynamic value) {
