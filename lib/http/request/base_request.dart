@@ -1,3 +1,6 @@
+import 'package:flutter_bili_app/db/hi_cache.dart';
+import 'package:flutter_bili_app/http/dao/login_dao.dart';
+
 enum HttpMethod { GET, POST, DELETE }
 
 /// 基础请求:
@@ -34,6 +37,7 @@ abstract class BaseRequest {
 
     if (needLogin()) {
       // 给需要登录页的接口携带登录令牌:
+      addHeader(LoginDao.BOARDING_PASS, LoginDao.getBoardingPass());
     }
 
     print('url: ${uri.toString()}');
@@ -58,7 +62,7 @@ abstract class BaseRequest {
   };
 
   BaseRequest addHeader(String key, dynamic value) {
-    params[key] = value.toString();
+    header[key] = value.toString();
     return this;
   }
 }

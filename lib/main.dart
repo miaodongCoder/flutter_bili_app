@@ -1,14 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/db/hi_cache.dart';
 import 'package:flutter_bili_app/http/core/hi_error.dart';
 import 'package:flutter_bili_app/http/core/hi_net.dart';
 import 'package:flutter_bili_app/http/dao/login_dao.dart';
-import 'package:flutter_bili_app/http/request/login_request.dart';
-import 'package:flutter_bili_app/http/request/test_request.dart';
-import 'package:flutter_bili_app/model/Owner.dart';
-import 'package:flutter_bili_app/model/result.dart';
+import 'package:flutter_bili_app/http/request/notice_request.dart';
 
 void main() {
   runApp(const MyApp());
@@ -76,35 +71,31 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void test() {
-    var ownerMap = {
-      "name": "名称!",
-      "face": "https://coding.imooc.com/class/487.html",
-      "fans": 0
-    };
-
-    Owner owner = Owner.fromJson(ownerMap);
-    print('${owner.name} , ${owner.face} , ${owner.fans}');
-
-    var resultJson = {
-      "code": 0,
-      "method": "GET",
-      "requestPrams": "requestPrams"
-    };
-    Result result = Result.fromJson(resultJson);
-    print("result = $result");
-  }
-
+  /// 登录:
   void testLogin() async {
     try {
-      var register = await LoginDao.registration("222", "222", "3926757", "8902");
-      print("main- 注册 $register");
-      // var login = await LoginDao.login("111", "111");
-      // print(login);
+      var login = await LoginDao.login("222", "222");
+      print(login);
+      print("--------");
     } on NeedLogin catch (e) {
-      print(e);
+      print(e.message);
     } on HiNetError catch (e) {
-      print(e);
+      print(e.message);
+    } finally {
+      testNotice();
+    }
+  }
+
+  void testNotice() async {
+    try {
+      var notice = await HiNet.getInstance().fire(NoticeRequest());
+      print(notice);
+    } on NeedLogin catch (e) {
+      print(e.message);
+    } on NeedAuthor catch (e) {
+      print(e.message);
+    } on HiNetError catch (e) {
+      print(e.message);
     }
   }
 }
