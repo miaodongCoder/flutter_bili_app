@@ -15,12 +15,7 @@ class HiNetResponse<T> {
   String? statusMessage;
   dynamic extra;
 
-  HiNetResponse(
-      {required this.data,
-      required this.request,
-      this.statusCode,
-      this.statusMessage,
-      this.extra});
+  HiNetResponse({required this.data, required this.request, this.statusCode, this.statusMessage, this.extra});
 
   @override
   String toString() {

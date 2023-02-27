@@ -1,4 +1,5 @@
 part of 'result.dart';
+
 // 命令:
 Result _$ResultFromJson(Map<String, dynamic> json) => Result(
       json['code'] as int,

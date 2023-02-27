@@ -15,5 +15,4 @@ class NoticeRequest extends BaseRequest {
   String path() {
     return "/uapi/notice";
   }
-
 }
