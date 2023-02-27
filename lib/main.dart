@@ -4,7 +4,8 @@ import 'package:flutter_bili_app/http/core/hi_error.dart';
 import 'package:flutter_bili_app/http/core/hi_net.dart';
 import 'package:flutter_bili_app/http/dao/login_dao.dart';
 import 'package:flutter_bili_app/http/request/notice_request.dart';
-import 'package:flutter_bili_app/page/registration.dart';
+import 'package:flutter_bili_app/page/login_page.dart';
+import 'package:flutter_bili_app/page/registration_page.dart';
 import 'package:flutter_bili_app/util/color.dart';
 
 void main() {
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: white,
       ),
-      home: RegistrationPage(onJumpLogin: () {}),
+      // home: RegistrationPage(onJumpLogin: () {}),
+      home: const LoginPage(),
     );
   }
 }

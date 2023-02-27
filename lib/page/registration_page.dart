@@ -59,6 +59,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               focusChange: (bool focus) {
                 print("密码 - 聚焦了!");
                 setState(() {
+                  // 卡通人物闭眼:
                   protect = focus;
                 });
               },
