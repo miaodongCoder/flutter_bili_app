@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: white,
       ),
-      // home: RegistrationPage(onJumpLogin: () {}),
-      home: const LoginPage(),
+      home: RegistrationPage(onJumpLogin: () {}),
+      // home: const LoginPage(),
     );
   }
 }

@@ -12,11 +12,13 @@ class LoginDao {
     return await _send(userName, password);
   }
 
-  static registration(String userName, String password, String imoocId, String orderId) async {
+  static registration(
+      String userName, String password, String imoocId, String orderId) async {
     return await _send(userName, password, imoocId: imoocId, orderId: orderId);
   }
 
-  static _send(String userName, String password, {dynamic imoocId, dynamic orderId}) async {
+  static _send(String userName, String password,
+      {dynamic imoocId, dynamic orderId}) async {
     BaseRequest request;
     // 保存登录令牌到本地:
     var cache = HiCache.getInstance();

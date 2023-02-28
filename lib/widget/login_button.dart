@@ -5,7 +5,8 @@ class LoginButton extends StatelessWidget {
   final String title;
   final bool enable;
   final VoidCallback? onPress;
-  const LoginButton(this.title, {Key? key, this.enable = true, this.onPress}) : super(key: key);
+  const LoginButton(this.title, {Key? key, this.enable = true, this.onPress})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

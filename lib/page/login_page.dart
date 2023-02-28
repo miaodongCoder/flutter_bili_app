@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/http/core/hi_error.dart';
 import 'package:flutter_bili_app/http/dao/login_dao.dart';
 import 'package:flutter_bili_app/util/string_util.dart';
+import 'package:flutter_bili_app/util/toast.dart';
 import 'package:flutter_bili_app/widget/appbar.dart';
 import 'package:flutter_bili_app/widget/login_button.dart';
 import 'package:flutter_bili_app/widget/login_effect.dart';
@@ -59,11 +60,15 @@ class _LoginPageState extends State<LoginPage> {
                 });
               },
             ),
-             Padding(
-              padding:const  EdgeInsets.only(top: 15, left: 20, right: 20),
-              child: LoginButton("登录", enable: loginEnable , onPress: () {
-                send();
-              },),
+            Padding(
+              padding: const EdgeInsets.only(top: 15, left: 20, right: 20),
+              child: LoginButton(
+                "登录",
+                enable: loginEnable,
+                onPress: () {
+                  send();
+                },
+              ),
             ),
           ],
         ),
@@ -91,9 +96,9 @@ class _LoginPageState extends State<LoginPage> {
       var result = await LoginDao.login(userName!, password!);
       print('result = $result');
       if (result['code'] == 0) {
-        print('登录成功!');
+        showToast("登录成功!");
       } else {
-        print(result['msg']);
+        showWarnToast(result['msg']);
       }
     } on NeedAuthor catch (e) {
       print('NeedAuthor: $e');

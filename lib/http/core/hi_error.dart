@@ -8,7 +8,8 @@ class HiNetError {
 
 /// 授权异常:
 class NeedAuthor extends HiNetError {
-  NeedAuthor(String message, {int code = 403, dynamic data}) : super(code, message, data: data);
+  NeedAuthor(String message, {int code = 403, dynamic data})
+      : super(code, message, data: data);
 }
 
 /// 登录异常:

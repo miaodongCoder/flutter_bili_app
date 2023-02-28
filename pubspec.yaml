@@ -41,6 +41,8 @@ dependencies:
   # JSON 注解:序列化模型
   json_annotation: ^4.8.0
   shared_preferences: ^2.0.17
+  fluttertoast: ^8.2.1
+
 
 
 dev_dependencies:

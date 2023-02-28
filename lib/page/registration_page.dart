@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/http/core/hi_error.dart';
 import 'package:flutter_bili_app/http/dao/login_dao.dart';
 import 'package:flutter_bili_app/util/string_util.dart';
+import 'package:flutter_bili_app/util/toast.dart';
 import 'package:flutter_bili_app/widget/appbar.dart';
+import 'package:flutter_bili_app/widget/login_button.dart';
 import 'package:flutter_bili_app/widget/login_effect.dart';
 import 'package:flutter_bili_app/widget/login_widget.dart';
 
 class RegistrationPage extends StatefulWidget {
   final VoidCallback? onJumpLogin;
-  const RegistrationPage({Key? key, required this.onJumpLogin}) : super(key: key);
+  const RegistrationPage({Key? key, required this.onJumpLogin})
+      : super(key: key);
 
   @override
   State<RegistrationPage> createState() => _RegistrationPageState();
@@ -51,7 +54,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
               "密码",
               "请输入用密码",
               obscureText: true,
-              lineStretch: false,
               onChange: (String password) {
                 this.password = password;
                 checkInput();
@@ -68,7 +70,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
               "确认密码",
               "请再次输入用密码",
               obscureText: true,
-              lineStretch: false,
               onChange: (String rePassword) {
                 this.rePassword = rePassword;
                 checkInput();
@@ -83,8 +84,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
             LoginInput(
               "慕课网ID",
               "请输入您的慕课网ID",
-              obscureText: true,
-              lineStretch: false,
               keyboardType: TextInputType.number,
               onChange: (String imoocId) {
                 this.imoocId = imoocId;
@@ -97,8 +96,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
             LoginInput(
               "订单号",
               "请输入您的订单号后四位",
-              obscureText: true,
-              lineStretch: false,
               keyboardType: TextInputType.number,
               onChange: (String orderId) {
                 this.orderId = orderId;
@@ -110,7 +107,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: _getLoginButton(),
+              child: LoginButton(
+                "注册",
+                enable: loginEnable,
+                onPress: () {
+                  if (loginEnable) {
+                    checkParams();
+                  } else {
+                    showWarnToast("无法点击登陆 因为: loginEnable = $loginEnable");
+                  }
+                },
+              ),
             ),
           ],
         ),
@@ -120,9 +127,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   void checkInput() {
     bool enable;
-    if (userName == null || password == null || rePassword == null || imoocId == null || orderId == null) return;
+    if (userName == null ||
+        password == null ||
+        rePassword == null ||
+        imoocId == null ||
+        orderId == null) return;
 
-    if (isNotEmpty(userName!) && isNotEmpty(password!) && isNotEmpty(rePassword!) && isNotEmpty(imoocId!) && isNotEmpty(orderId!)) {
+    if (isNotEmpty(userName!) &&
+        isNotEmpty(password!) &&
+        isNotEmpty(rePassword!) &&
+        isNotEmpty(imoocId!) &&
+        isNotEmpty(orderId!)) {
       enable = true;
     } else {
       enable = false;
@@ -133,39 +148,23 @@ class _RegistrationPageState extends State<RegistrationPage> {
     });
   }
 
-  /// 获取登录按钮:
-  Widget _getLoginButton() {
-    return InkWell(
-      onTap: () {
-        if (loginEnable) {
-          checkParams();
-        } else {
-          print(" 无法点击登陆 因为: loginEnable = $loginEnable");
-        }
-      },
-      child: const Text(
-        "注册",
-        style: TextStyle(fontSize: 18),
-      ),
-    );
-  }
-
   void send() async {
     try {
-      var result = await LoginDao.registration(userName!, password!, imoocId!, orderId!);
+      var result =
+          await LoginDao.registration(userName!, password!, imoocId!, orderId!);
       print('result = $result');
       if (result['code'] == 0) {
-        print('注册成功!');
+        showToast('注册成功!');
         if (widget.onJumpLogin != null) {
           widget.onJumpLogin!();
         }
       } else {
-        print(result['msg']);
+        showWarnToast(result['msg']);
       }
     } on NeedAuthor catch (e) {
-      print('NeedAuthor: $e');
+      showWarnToast(e.message);
     } on HiNetError catch (e) {
-      print('HiNetError: $e');
+      showWarnToast(e.message);
     }
   }
 
@@ -177,7 +176,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       tips = '请输入订单号后四位!';
     }
     if (tips != null) {
-      print(tips);
+      showWarnToast(tips);
       return;
     }
     // 发送登录请求:
