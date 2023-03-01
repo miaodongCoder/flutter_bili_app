@@ -48,7 +48,7 @@ class LoginDao {
   static String? getBoardingPass() {
     var cache = HiCache.getInstance();
     if (cache != null) {
-      String pass = cache.get(BOARDING_PASS);
+      String? pass = cache.get(BOARDING_PASS);
       return pass;
     }
     return null;
