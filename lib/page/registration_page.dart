@@ -10,7 +10,7 @@ import 'package:flutter_bili_app/widget/login_widget.dart';
 
 class RegistrationPage extends StatefulWidget {
   final VoidCallback? onJumpLogin;
-  const RegistrationPage({Key? key, required this.onJumpLogin})
+  const RegistrationPage({Key? key, this.onJumpLogin})
       : super(key: key);
 
   @override

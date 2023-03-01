@@ -9,9 +9,13 @@ import 'package:flutter_bili_app/widget/login_button.dart';
 import 'package:flutter_bili_app/widget/login_effect.dart';
 import 'package:flutter_bili_app/widget/login_widget.dart';
 
+/// 登录页面:
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final VoidCallback? onJumpRegistration;
+  final VoidCallback? onSuccess;
 
+  const LoginPage({Key? key, this.onJumpRegistration, this.onSuccess})
+      : super(key: key);
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -28,7 +32,11 @@ class _LoginPageState extends State<LoginPage> {
       appBar: appBar(
         "密码登录",
         "注册",
-        () {},
+        () {
+          if (widget.onJumpRegistration != null) {
+            widget.onJumpRegistration!();
+          }
+        },
       ),
       body: Container(
         child: ListView(
@@ -97,6 +105,9 @@ class _LoginPageState extends State<LoginPage> {
       print('result = $result');
       if (result['code'] == 0) {
         showToast("登录成功!");
+        if (widget.onSuccess != null) {
+          widget.onSuccess!();
+        }
       } else {
         showWarnToast(result['msg']);
       }
