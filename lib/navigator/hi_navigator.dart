@@ -101,7 +101,7 @@ class HiNavigator extends _RouteJumpListener {
   void notify(List<MaterialPage> currentPages, List<MaterialPage> prePages) {
     if (currentPages == prePages) return;
     var current =
-    RouteStatusInfo(getStatus(currentPages.last), currentPages.last.child);
+        RouteStatusInfo(getStatus(currentPages.last), currentPages.last.child);
     _notify(current);
   }
 
