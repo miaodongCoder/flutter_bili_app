@@ -1,10 +1,15 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/navigator/bottom_navigator.dart';
 import 'package:flutter_bili_app/page/login_page.dart';
 import 'package:flutter_bili_app/page/registration_page.dart';
 import 'package:flutter_bili_app/page/video_detail_page.dart';
 
-typedef RouteChangeListener(RouteStatusInfo current, RouteStatusInfo? pre);
+// 页面跳转的监听:
+// 入参分别是: 1.当前打开的页面。2.上一次的页面。
+typedef RouteChangeListener = Function(
+    RouteStatusInfo current, RouteStatusInfo? pre);
 
 ///创建页面
 MaterialPage pageWrap(Widget child) {
@@ -31,7 +36,9 @@ RouteStatus getStatus(MaterialPage page) {
     return RouteStatus.login;
   } else if (page.child is RegistrationPage) {
     return RouteStatus.registration;
-  } else if (page.child is BottomNavigator) {
+  }
+  // 首页:
+  else if (page.child is BottomNavigator) {
     return RouteStatus.home;
   } else if (page.child is VideoDetailPage) {
     return RouteStatus.detail;
@@ -52,32 +59,32 @@ class RouteStatusInfo {
 ///感知当前页面是否压后台
 class HiNavigator extends _RouteJumpListener {
   static HiNavigator? _instance;
-
+  // 创建监听用于获取跳转能力:
   RouteJumpListener? _routeJump;
-  List<RouteChangeListener> _listeners = [];
+  final List<RouteChangeListener> _listeners = [];
   RouteStatusInfo? _current;
 
-  //首页底部tab
+  //首页底部tab:
   RouteStatusInfo? _bottomTab;
 
   HiNavigator._();
 
   static HiNavigator getInstance() {
-    if (_instance == null) {
-      _instance = HiNavigator._();
-    }
+    _instance ??= HiNavigator._();
     return _instance!;
   }
 
-  ///首页底部tab切换监听
+  /// 首页底部tab切换监听:
   void onBottomTabChange(int index, Widget page) {
-    _bottomTab = RouteStatusInfo(RouteStatus.home, page);
-    _notify(_bottomTab!);
+    _bottomTab ??= RouteStatusInfo(RouteStatus.home, page);
+    if (_bottomTab != null) {
+      _notify(_bottomTab!);
+    }
   }
 
   ///注册路由跳转逻辑
   void registerRouteJump(RouteJumpListener routeJumpListener) {
-    this._routeJump = routeJumpListener;
+    _routeJump = routeJumpListener;
   }
 
   ///监听路由页面跳转
@@ -110,16 +117,16 @@ class HiNavigator extends _RouteJumpListener {
       //如果打开的是首页，则明确到首页具体的tab
       current = _bottomTab!;
     }
-    print('hi_navigator:current:${current.page}');
-    print('hi_navigator:pre:${_current?.page}');
-    _listeners.forEach((listener) {
+    print('hi_navigator: current: ${current.page}');
+    print('hi_navigator: pre:     ${_current?.page}');
+    for (var listener in _listeners) {
       listener(current, _current);
-    });
+    }
     _current = current;
   }
 }
 
-///抽象类供HiNavigator实现
+///抽象类供HiNavigator实现:
 abstract class _RouteJumpListener {
   void onJumpTo(RouteStatus routeStatus, {Map args});
 }

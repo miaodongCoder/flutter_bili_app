@@ -22,16 +22,12 @@ class HiCache {
   }
 
   static HiCache getInstance() {
-    if (_instance == null) {
-      _instance = HiCache._();
-    }
+    _instance ??= HiCache._();
     return _instance!;
   }
 
   void init() async {
-    if (prefs == null) {
-      prefs = await SharedPreferences.getInstance();
-    }
+    prefs ??= await SharedPreferences.getInstance();
   }
 
   setString(String key, String value) {

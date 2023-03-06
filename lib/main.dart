@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/db/hi_cache.dart';
 import 'package:flutter_bili_app/http/dao/login_dao.dart';
+import 'package:flutter_bili_app/navigator/bottom_navigator.dart';
 import 'package:flutter_bili_app/navigator/hi_navigator.dart';
 import 'package:flutter_bili_app/page/home_page.dart';
 import 'package:flutter_bili_app/page/login_page.dart';
@@ -59,7 +60,18 @@ class BiliRouterDelegate extends RouterDelegate<BiliRouterPath>
   RouteStatus _routeStatus = RouteStatus.home;
   @override
   final GlobalKey<NavigatorState> navigatorKey;
-  BiliRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+  BiliRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>() {
+    HiNavigator.getInstance().registerRouteJump(
+      RouteJumpListener(
+        onJumpTo: (RouteStatus routeStatus, {Map? args}) {
+          if (routeStatus == RouteStatus.detail) {
+            videoModel = args!['videoModel'];
+          }
+          notifyListeners();
+        },
+      ),
+    );
+  }
   // 存放所有的页面:
   List<MaterialPage> pages = [];
   VideoModel? videoModel;
@@ -79,12 +91,7 @@ class BiliRouterDelegate extends RouterDelegate<BiliRouterPath>
     if (routeStatus == RouteStatus.home) {
       pages.clear();
       page = pageWrap(
-        HomePage(
-          onJumpToDetail: (VideoModel videoModel) {
-            this.videoModel = videoModel;
-            notifyListeners();
-          },
-        ),
+        const BottomNavigator(),
       );
     } else if (routeStatus == RouteStatus.detail) {
       page = pageWrap(
@@ -92,36 +99,17 @@ class BiliRouterDelegate extends RouterDelegate<BiliRouterPath>
       );
     } else if (routeStatus == RouteStatus.registration) {
       page = pageWrap(
-        RegistrationPage(
-          onJumpLogin: () {
-            _routeStatus = RouteStatus.login;
-            notifyListeners();
-          },
-        ),
+        const RegistrationPage(),
       );
     } else if (routeStatus == RouteStatus.login) {
       page = pageWrap(
-        LoginPage(
-          onSuccess: () {
-            _routeStatus = RouteStatus.home;
-            notifyListeners();
-          },
-          onJumpRegistration: () {
-            _routeStatus = RouteStatus.registration;
-            notifyListeners();
-          },
-        ),
+        const LoginPage(),
       );
     }
     // 未知:
     else {
       page = pageWrap(
-        HomePage(
-          onJumpToDetail: (VideoModel videoModel) {
-            this.videoModel = videoModel;
-            notifyListeners();
-          },
-        ),
+        const HomePage(),
       );
     }
 

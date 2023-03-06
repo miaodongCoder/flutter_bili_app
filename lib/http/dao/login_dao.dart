@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, avoid_print
+
 import 'package:flutter_bili_app/db/hi_cache.dart';
 import 'package:flutter_bili_app/http/core/hi_net.dart';
 import 'package:flutter_bili_app/http/request/base_request.dart';
@@ -47,10 +49,7 @@ class LoginDao {
 
   static String? getBoardingPass() {
     var cache = HiCache.getInstance();
-    if (cache != null) {
-      String? pass = cache.get(BOARDING_PASS);
-      return pass;
-    }
-    return null;
+    String? pass = cache.get(BOARDING_PASS);
+    return pass;
   }
 }

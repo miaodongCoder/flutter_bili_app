@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, prefer_typing_uninitialized_variables
+
 import 'package:flutter_bili_app/http/core/dio_adapter.dart';
 import 'package:flutter_bili_app/http/core/hi_error.dart';
 import 'package:flutter_bili_app/http/request/base_request.dart';

@@ -42,6 +42,7 @@ dependencies:
   json_annotation: ^4.8.0
   shared_preferences: ^2.0.17
   fluttertoast: ^8.2.1
+  underline_indicator: ^0.0.4
 
 
 

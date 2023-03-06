@@ -1,7 +1,11 @@
+// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 ///收藏
 class FavoritePage extends StatefulWidget {
+  const FavoritePage({super.key});
+
   @override
   _FavoritePageState createState() => _FavoritePageState();
 }
