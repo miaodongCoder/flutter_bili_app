@@ -1,4 +1,6 @@
-/// 手写的方式 JSON 转模型:
+// 手写的方式 JSON 转模型:
+// ignore_for_file: file_names
+
 class Owner {
   String? name;
   String? face;

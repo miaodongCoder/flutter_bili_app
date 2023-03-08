@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: avoid_unnecessary_containers, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/http/core/hi_error.dart';
 import 'package:flutter_bili_app/http/dao/login_dao.dart';
@@ -12,8 +13,7 @@ import 'package:flutter_bili_app/widget/login_widget.dart';
 
 /// 登录页面:
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key})
-      : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
   @override
   State<LoginPage> createState() => _LoginPageState();
 }

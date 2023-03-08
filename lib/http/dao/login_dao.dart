@@ -39,10 +39,10 @@ class LoginDao {
     print("login_dao: $result");
     // 登录成功:
     if (result['code'] == 0 && result['data'] != null) {
-      if (cache?.prefs == null) {
+      if (cache.prefs == null) {
         HiCache.preInit();
       }
-      cache?.setString(BOARDING_PASS, result['data']);
+      cache.setString(BOARDING_PASS, result['data']);
     }
     return result;
   }

@@ -7,9 +7,8 @@ import 'hi_adapter.dart';
 
 class HiNet {
   HiNet._();
-  static HiNet _instance = HiNet._();
+  static final HiNet _instance = HiNet._();
   static HiNet getInstance() {
-    _instance ??= HiNet._();
     return _instance;
   }
 

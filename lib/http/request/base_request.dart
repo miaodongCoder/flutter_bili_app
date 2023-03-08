@@ -1,4 +1,5 @@
-import 'package:flutter_bili_app/db/hi_cache.dart';
+// ignore_for_file: constant_identifier_names, prefer_typing_uninitialized_variables, avoid_print
+
 import 'package:flutter_bili_app/http/dao/login_dao.dart';
 
 enum HttpMethod { GET, POST, DELETE }
