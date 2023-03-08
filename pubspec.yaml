@@ -44,6 +44,7 @@ dependencies:
   fluttertoast: ^8.2.1
   underline_indicator: ^0.0.4
   flutter_swiper: ^1.1.6
+  flutter_statusbar_manager: ^2.0.0
 
 
 

@@ -9,6 +9,7 @@ import 'package:flutter_bili_app/navigator/hi_navigator.dart';
 import 'package:flutter_bili_app/page/home_tab_page.dart';
 import 'package:flutter_bili_app/util/color.dart';
 import 'package:flutter_bili_app/util/toast.dart';
+import 'package:flutter_bili_app/widget/navigation_bar.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,7 +23,6 @@ class _HomePageState extends HiState<HomePage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   var listener;
   late TabController _controller;
-  // var tabs = ["推荐", "热门", "追播", "影视", "搞笑", "日常", "综合", "手机游戏", "短片·手书·配音"];
   List<CategoryMo> categoryList = [];
   List<BannerMo> bannerList = [];
 
@@ -56,9 +56,15 @@ class _HomePageState extends HiState<HomePage>
     return Scaffold(
       body: Column(
         children: [
+          Navigation_Bar(
+            child: _appBar(),
+            height: 44,
+            color: primary,
+            statusStyle: StatusStyle.DARK_CONTENT,
+          ),
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.only(top: 44),
+            padding: const EdgeInsets.only(top: 4),
             child: _tabBar(),
           ),
           Flexible(
@@ -124,5 +130,10 @@ class _HomePageState extends HiState<HomePage>
       print(e);
       showWarnToast(e.message);
     }
+  }
+
+  //( 图片 + 搜索框 + 图标 + 图标 ) 样式的顶部AppBar:
+  _appBar() {
+    return null;
   }
 }

@@ -238,6 +238,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.0.3"
+  flutter_statusbar_manager:
+    dependency: "direct main"
+    description:
+      name: flutter_statusbar_manager
+      sha256: e8e580b806194e809a3204474ffad93e0f808e973624d6870f0d91d860421a7d
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
   flutter_swiper:
     dependency: "direct main"
     description:
