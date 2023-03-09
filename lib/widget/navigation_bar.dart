@@ -35,6 +35,8 @@ class Navigation_Bar extends StatelessWidget {
   void _statusBarInit() {
     // 沉浸式状态栏:
     FlutterStatusbarManager.setColor(color, animated: true);
-    FlutterStatusbarManager.setStyle(statusStyle == StatusStyle.DARK_CONTENT ? StatusBarStyle.DARK_CONTENT : StatusBarStyle.LIGHT_CONTENT);
+    FlutterStatusbarManager.setStyle(statusStyle == StatusStyle.DARK_CONTENT
+        ? StatusBarStyle.DARK_CONTENT
+        : StatusBarStyle.LIGHT_CONTENT);
   }
 }
