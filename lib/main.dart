@@ -1,115 +1,173 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bili_app/db/hi_cache.dart';
+import 'package:flutter_bili_app/http/dao/login_dao.dart';
+import 'package:flutter_bili_app/navigator/bottom_navigator.dart';
+import 'package:flutter_bili_app/navigator/hi_navigator.dart';
+import 'package:flutter_bili_app/page/home_page.dart';
+import 'package:flutter_bili_app/page/login_page.dart';
+import 'package:flutter_bili_app/page/registration_page.dart';
+import 'package:flutter_bili_app/page/video_detail_page.dart';
+import 'package:flutter_bili_app/util/toast.dart';
+
+import 'model/video_model.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const BiliApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class BiliApp extends StatefulWidget {
+  const BiliApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<BiliApp> createState() => _BiliAppState();
+}
+
+class _BiliAppState extends State<BiliApp> {
+  final BiliRouterDelegate _routerDelegate = BiliRouterDelegate();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+    return FutureBuilder<HiCache>(
+        future: HiCache.preInit(),
+        builder: (BuildContext context, AsyncSnapshot<HiCache> snapshot) {
+          Widget widget;
+          if (snapshot.connectionState == ConnectionState.done) {
+            widget = Router(routerDelegate: _routerDelegate);
+          } else {
+            widget = const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          return MaterialApp(
+            theme: ThemeData(primaryColor: Colors.white),
+            home: widget,
+          );
+        });
+  }
+}
+
+class BiliRouterPath {
+  final String location;
+  // 命名构造函数:
+  BiliRouterPath.path() : location = "/";
+  BiliRouterPath.detail() : location = "/detail";
+}
+
+class BiliRouterDelegate extends RouterDelegate<BiliRouterPath>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<BiliRouterPath> {
+  RouteStatus _routeStatus = RouteStatus.home;
+  @override
+  final GlobalKey<NavigatorState> navigatorKey;
+  BiliRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>() {
+    HiNavigator.getInstance().registerRouteJump(
+      RouteJumpListener(
+        onJumpTo: (RouteStatus routeStatus, {Map? args}) {
+          if (routeStatus == RouteStatus.detail) {
+            videoModel = args!['videoModel'];
+          }
+          notifyListeners();
+        },
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  // 存放所有的页面:
+  List<MaterialPage> pages = [];
+  VideoModel? videoModel;
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+    // 管理路由堆栈:
+    var index = getPageIndex(pages, routeStatus);
+    List<MaterialPage> tempPages = pages;
+    if (index != -1) {
+      // 要打开的页面在栈中已存在, 则将该页面和它上面的所有页面进行出栈处理:
+      // tips: 具体规则可以根据需求调整, 这里要求栈中只允许有一个同样的页面实例!
+      tempPages = tempPages.sublist(0, index);
+    }
+
+    MaterialPage page;
+    if (routeStatus == RouteStatus.home) {
+      pages.clear();
+      page = pageWrap(
+        const BottomNavigator(),
+      );
+    } else if (routeStatus == RouteStatus.detail) {
+      page = pageWrap(
+        VideoDetailPage(videoModel),
+      );
+    } else if (routeStatus == RouteStatus.registration) {
+      page = pageWrap(
+        const RegistrationPage(),
+      );
+    } else if (routeStatus == RouteStatus.login) {
+      page = pageWrap(
+        const LoginPage(),
+      );
+    }
+    // 未知:
+    else {
+      page = pageWrap(
+        const HomePage(),
+      );
+    }
+
+    // 重新创建一个新的数组 , 否则 pages 因为引用没有改变路由不会生效:
+    tempPages = [...tempPages, page];
+    pages = tempPages;
+
+    return WillPopScope(
+      child: Navigator(
+        key: navigatorKey,
+        pages: pages,
+        onPopPage: (route, result) {
+          // if (route.didPop(result)) {
+          //   return true;
+          // }
+          // return false;
+
+          if (route.settings is MaterialPage) {
+            // 登录页未登录返回拦截处理:
+            if ((route.settings as MaterialPage).child is LoginPage) {
+              if (!hasLogin) {
+                showWarnToast('请先登录!');
+                return false;
+              }
+            }
+          }
+          // 执行返回的操作:
+          if (!route.didPop(result)) {
+            return false;
+          }
+          var tempPages = [...pages];
+          // 出栈:
+          pages.removeLast();
+          // 通知路由发生变化:
+          HiNavigator.getInstance().notify(pages, tempPages);
+          return true;
+        },
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      onWillPop: () async {
+        return !(await navigatorKey.currentState?.maybePop() ?? false);
+      },
     );
   }
+
+  RouteStatus get routeStatus {
+    if (_routeStatus != RouteStatus.registration && !hasLogin) {
+      return _routeStatus = RouteStatus.login;
+    } else if (videoModel != null) {
+      return _routeStatus = RouteStatus.detail;
+    }
+    return _routeStatus;
+  }
+
+  bool get hasLogin {
+    String? boardingPass = LoginDao.getBoardingPass();
+    return boardingPass != null;
+  }
+
+  @override
+  Future<void> setNewRoutePath(BiliRouterPath configuration) async {}
 }
