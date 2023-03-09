@@ -1,2 +1,2 @@
 # flutter_bili_app
-Flutter仿哔哩哔哩
+Flutter 实现哔哩哔哩客户端的代码~
