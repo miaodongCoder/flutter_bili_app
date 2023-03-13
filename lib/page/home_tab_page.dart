@@ -35,7 +35,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
     _scrollController.addListener(() {
       var dis = _scrollController.position.maxScrollExtent -
           _scrollController.position.pixels;
-      print('dis: $dis');
+      // print('dis: $dis');
       if (dis < 300 && !_loading) {
         _loadData(loadMore: true);
       }
