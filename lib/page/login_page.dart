@@ -107,8 +107,10 @@ class _LoginPageState extends State<LoginPage> {
       }
     } on NeedAuthor catch (e) {
       print('NeedAuthor: $e');
+      showWarnToast(e.message);
     } on HiNetError catch (e) {
       print('HiNetError: $e');
+      showWarnToast(e.message);
     }
   }
 }

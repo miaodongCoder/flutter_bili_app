@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/model/video_model.dart';
 import 'package:flutter_bili_app/navigator/hi_navigator.dart';
 import 'package:flutter_bili_app/util/format_util.dart';
+import 'package:flutter_bili_app/util/view_util.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class VideoCard extends StatelessWidget {
@@ -13,8 +14,7 @@ class VideoCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         print(videoModel.url);
-        HiNavigator.getInstance()
-            .onJumpTo(RouteStatus.detail, args: {"videoModel": videoModel});
+        HiNavigator.getInstance().onJumpTo(RouteStatus.detail, args: {"videoModel": videoModel});
       },
       child: SizedBox(
         height: 200,
@@ -41,20 +41,17 @@ class VideoCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Stack(
       children: [
-        FadeInImage.memoryNetwork(
+        cachedImage(
+          videoModel.cover,
+          width: size.width / 2 - 10,
           height: 120,
-          width: (size.width - 20),
-          fit: BoxFit.cover,
-          placeholder: kTransparentImage,
-          image: videoModel.cover,
         ),
         Positioned(
           left: 0,
           right: 0,
           bottom: 0,
           child: Container(
-            padding:
-                const EdgeInsets.only(left: 8, right: 8, bottom: 3, top: 5),
+            padding: const EdgeInsets.only(left: 8, right: 8, bottom: 3, top: 5),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.bottomCenter,
@@ -142,7 +139,7 @@ class VideoCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.network(
+              child: cachedImage(
                 videoModel.owner.face,
                 width: 24,
                 height: 24,

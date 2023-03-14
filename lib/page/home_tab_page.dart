@@ -15,27 +15,27 @@ class HomeTabPage extends StatefulWidget {
   final String category;
   final List<BannerMo>? bannerList;
 
-  const HomeTabPage({Key? key, required this.category, this.bannerList})
-      : super(key: key);
+  const HomeTabPage({Key? key, required this.category, this.bannerList}) : super(key: key);
 
   @override
   _HomeTabPageState createState() => _HomeTabPageState();
 }
 
-class _HomeTabPageState extends State<HomeTabPage> {
+class _HomeTabPageState extends State<HomeTabPage> with AutomaticKeepAliveClientMixin {
   List<VideoModel> videoList = [];
   int pageIndex = 1;
+  // 是否正在加载更多中:
   bool _loading = false;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _loadData();
     _scrollController.addListener(() {
-      var dis = _scrollController.position.maxScrollExtent -
-          _scrollController.position.pixels;
-      // print('dis: $dis');
+      // 列表距离最底部还差多远的距离 = ( 最大可滚动距离 - 当前距离 );
+      var dis = _scrollController.position.maxScrollExtent - _scrollController.position.pixels;
+      // 底部距离300的时候我就提前请求网络加载更多数据:
       if (dis < 300 && !_loading) {
         _loadData(loadMore: true);
       }
@@ -52,6 +52,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
         onRefresh: _loadData,
         color: primary,
@@ -61,6 +62,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
           child: Container(
             child: SingleChildScrollView(
               controller: _scrollController,
+              // 列表的长度不足以填满整个屏幕的高度时下拉控件是失效的, 这里让它永远滚动永远可以下拉刷新:
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
               child: StaggeredGrid.count(
@@ -113,21 +115,22 @@ class _HomeTabPageState extends State<HomeTabPage> {
     }
     var currentIndex = pageIndex + (loadMore ? 1 : 0);
     try {
-      HomeMo result = await HomeDao.get(widget.category,
-          pageIndex: currentIndex, pageSize: 50);
+      HomeMo result = await HomeDao.get(widget.category, pageIndex: currentIndex, pageSize: 50);
       print('HomeTabPage => loadData: $result');
       setState(() {
         // 加载更多数据:
         if (loadMore) {
           if (result.videoList != null) {
-            videoList = [...videoList, ...result.videoList];
+            videoList = [...videoList, ...result.videoList!];
             // videoList.addAll(result.videoList);
             pageIndex++;
           }
         }
         // 下拉刷新:
         else {
-          videoList = result.videoList;
+          if (result.videoList != null) {
+            videoList = result.videoList!;
+          }
         }
       });
 
@@ -149,4 +152,8 @@ class _HomeTabPageState extends State<HomeTabPage> {
       showWarnToast(e.message);
     }
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

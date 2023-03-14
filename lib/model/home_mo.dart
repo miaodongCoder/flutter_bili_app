@@ -4,7 +4,7 @@ import 'package:flutter_bili_app/model/video_model.dart';
 class HomeMo {
   List<BannerMo>? bannerList;
   List<CategoryMo>? categoryList;
-  late List<VideoModel> videoList;
+  List<VideoModel>? videoList;
 
   HomeMo({this.bannerList, this.categoryList, required this.videoList});
 
@@ -24,7 +24,7 @@ class HomeMo {
     if (json['videoList'] != null) {
       videoList = List<VideoModel>.empty(growable: true);
       json['videoList'].forEach((v) {
-        videoList.add(VideoModel.fromJson(v));
+        videoList!.add(VideoModel.fromJson(v));
       });
     }
   }
@@ -37,7 +37,9 @@ class HomeMo {
     if (categoryList != null) {
       data['categoryList'] = categoryList!.map((v) => v.toJson()).toList();
     }
-    data['videoList'] = videoList.map((v) => v.toJson()).toList();
+    if (videoList != null) {
+      data['videoList'] = videoList!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }

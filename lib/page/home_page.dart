@@ -9,6 +9,7 @@ import 'package:flutter_bili_app/navigator/hi_navigator.dart';
 import 'package:flutter_bili_app/page/home_tab_page.dart';
 import 'package:flutter_bili_app/util/color.dart';
 import 'package:flutter_bili_app/util/toast.dart';
+import 'package:flutter_bili_app/widget/loading_container.dart';
 import 'package:flutter_bili_app/widget/navigation_bar.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
@@ -22,12 +23,12 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends HiState<HomePage>
-    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+class _HomePageState extends HiState<HomePage> with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   var listener;
   late TabController _controller;
   List<CategoryMo> categoryList = [];
   List<BannerMo> bannerList = [];
+  bool _isShowLoading = true;
 
   @override
   void initState() {
@@ -57,34 +58,36 @@ class _HomePageState extends HiState<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      body: Column(
-        children: [
-          Navigation_Bar(
-            child: _appBar(),
-            height: 44,
-            color: Colors.white,
-            statusStyle: StatusStyle.DARK_CONTENT,
-          ),
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.only(top: 4),
-            child: _tabBar(),
-          ),
-          Flexible(
-            child: TabBarView(
-              controller: _controller,
-              children: categoryList.map(
-                (category) {
-                  return HomeTabPage(
-                    category: category.name,
-                    bannerList: category.name == '推荐' ? bannerList : null,
-                  );
-                },
-              ).toList(),
-            ),
-          ),
-        ],
-      ),
+      body: LoadingContainer(
+          cover: true,
+          isLoading: _isShowLoading,
+          child: Column(
+            children: [
+              Navigation_Bar(
+                child: _appBar(),
+                height: 44,
+                color: Colors.white,
+                statusStyle: StatusStyle.DARK_CONTENT,
+              ),
+              Container(
+                color: Colors.white,
+                child: _tabBar(),
+              ),
+              Flexible(
+                child: TabBarView(
+                  controller: _controller,
+                  children: categoryList.map(
+                    (category) {
+                      return HomeTabPage(
+                        category: category.name,
+                        bannerList: category.name == '推荐' ? bannerList : null,
+                      );
+                    },
+                  ).toList(),
+                ),
+              ),
+            ],
+          )),
     );
   }
 
@@ -97,10 +100,7 @@ class _HomePageState extends HiState<HomePage>
         controller: _controller,
         isScrollable: true,
         labelColor: Colors.black,
-        indicator: const UnderlineIndicator(
-            strokeCap: StrokeCap.round,
-            borderSide: BorderSide(color: primary, width: 3),
-            insets: EdgeInsets.only(left: 15, right: 15)),
+        indicator: const UnderlineIndicator(strokeCap: StrokeCap.round, borderSide: BorderSide(color: primary, width: 3), insets: EdgeInsets.only(left: 15, right: 15)),
         tabs: categoryList.map<Tab>((category) {
           return Tab(
               child: Padding(
@@ -119,22 +119,29 @@ class _HomePageState extends HiState<HomePage>
       HomeMo result = await HomeDao.get('推荐');
       print('loadData: $result');
       if (result.categoryList != null) {
-        _controller =
-            TabController(length: result.categoryList!.length, vsync: this);
-        setState(() {
-          categoryList = result.categoryList!;
-          if (result.bannerList != null) {
-            bannerList = result.bannerList!;
-          }
-        });
+        _controller = TabController(length: result.categoryList!.length, vsync: this);
       }
-      setState(() {});
+      setState(() {
+        if (result.categoryList != null) {
+          categoryList = result.categoryList!;
+        }
+        if (result.bannerList != null) {
+          bannerList = result.bannerList!;
+        }
+        _isShowLoading = false;
+      });
     } on NeedAuthor catch (e) {
       print(e);
       showWarnToast(e.message);
+      setState(() {
+        _isShowLoading = false;
+      });
     } on HiNetError catch (e) {
       print(e);
       showWarnToast(e.message);
+      setState(() {
+        _isShowLoading = false;
+      });
     }
   }
 
