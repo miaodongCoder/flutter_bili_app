@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/model/home_mo.dart';
 import 'package:flutter_bili_app/model/video_model.dart';
 import 'package:flutter_bili_app/navigator/hi_navigator.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HiBanner extends StatelessWidget {
   final List<BannerMo> bannerList;
@@ -71,7 +71,11 @@ class HiBanner extends StatelessWidget {
       );
       return;
     }
-    print('type: ${bannerMo.type}  url: ${bannerMo.url}');
-    // TODO: 跳转 H5 页面...
+    // 跳转 H5 页面:
+    _jumpToHtml5Page(bannerMo.url);
+  }
+
+  Future<bool> _jumpToHtml5Page(String url) async {
+    return await launchUrl(Uri.parse(url));
   }
 }
