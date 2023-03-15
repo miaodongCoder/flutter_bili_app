@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/model/home_mo.dart';
 import 'package:flutter_bili_app/model/video_model.dart';
 import 'package:flutter_bili_app/navigator/hi_navigator.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HiBanner extends StatelessWidget {
