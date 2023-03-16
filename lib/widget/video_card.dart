@@ -14,7 +14,8 @@ class VideoCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         print(videoModel.url);
-        HiNavigator.getInstance().onJumpTo(RouteStatus.detail, args: {"videoModel": videoModel});
+        HiNavigator.getInstance()
+            .onJumpTo(RouteStatus.detail, args: {"videoModel": videoModel});
       },
       child: SizedBox(
         height: 200,
@@ -51,7 +52,8 @@ class VideoCard extends StatelessWidget {
           right: 0,
           bottom: 0,
           child: Container(
-            padding: const EdgeInsets.only(left: 8, right: 8, bottom: 3, top: 5),
+            padding:
+                const EdgeInsets.only(left: 8, right: 8, bottom: 3, top: 5),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.bottomCenter,

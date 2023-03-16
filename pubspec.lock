@@ -496,6 +496,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.0"
+  orientation:
+    dependency: "direct main"
+    description:
+      name: orientation
+      sha256: "16f229c87220a897db803456e0709364ffb25fc4405df0e3214bef99fa91d81c"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.3.0"
   package_config:
     dependency: transitive
     description:

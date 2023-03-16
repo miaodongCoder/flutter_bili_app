@@ -15,13 +15,15 @@ class HomeTabPage extends StatefulWidget {
   final String category;
   final List<BannerMo>? bannerList;
 
-  const HomeTabPage({Key? key, required this.category, this.bannerList}) : super(key: key);
+  const HomeTabPage({Key? key, required this.category, this.bannerList})
+      : super(key: key);
 
   @override
   _HomeTabPageState createState() => _HomeTabPageState();
 }
 
-class _HomeTabPageState extends State<HomeTabPage> with AutomaticKeepAliveClientMixin {
+class _HomeTabPageState extends State<HomeTabPage>
+    with AutomaticKeepAliveClientMixin {
   List<VideoModel> videoList = [];
   int pageIndex = 1;
   // 是否正在加载更多中:
@@ -34,7 +36,8 @@ class _HomeTabPageState extends State<HomeTabPage> with AutomaticKeepAliveClient
     _loadData();
     _scrollController.addListener(() {
       // 列表距离最底部还差多远的距离 = ( 最大可滚动距离 - 当前距离 );
-      var dis = _scrollController.position.maxScrollExtent - _scrollController.position.pixels;
+      var dis = _scrollController.position.maxScrollExtent -
+          _scrollController.position.pixels;
       // 底部距离300的时候我就提前请求网络加载更多数据:
       if (dis < 300 && !_loading) {
         _loadData(loadMore: true);
@@ -115,7 +118,8 @@ class _HomeTabPageState extends State<HomeTabPage> with AutomaticKeepAliveClient
     }
     var currentIndex = pageIndex + (loadMore ? 1 : 0);
     try {
-      HomeMo result = await HomeDao.get(widget.category, pageIndex: currentIndex, pageSize: 50);
+      HomeMo result = await HomeDao.get(widget.category,
+          pageIndex: currentIndex, pageSize: 50);
       print('HomeTabPage => loadData: $result');
       setState(() {
         // 加载更多数据:

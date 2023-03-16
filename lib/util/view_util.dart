@@ -12,19 +12,43 @@ Widget cachedImage(String imageUrl, {double? width, double? height}) {
     width: width,
     height: height,
     fit: BoxFit.cover,
-    placeholder: (BuildContext context, String url) => Container(color: Colors.grey[200]),
-    errorWidget: (BuildContext context, String url, dynamic error) => const Icon(Icons.error),
+    placeholder: (BuildContext context, String url) =>
+        Container(color: Colors.grey[200]),
+    errorWidget: (BuildContext context, String url, dynamic error) =>
+        const Icon(Icons.error),
     imageUrl: imageUrl,
   );
 }
 
-void changeStatusBar({color = Colors.white, StatusBarStyle statusBarStyle = StatusBarStyle.DARK_CONTENT, BuildContext? context}) {
+blackLinearGradient({bool fromTop = false}) {
+  return LinearGradient(
+    begin: fromTop ? Alignment.topCenter : Alignment.bottomCenter,
+    end: fromTop ? Alignment.bottomCenter : Alignment.topCenter,
+    colors: const [
+      Colors.black54,
+      Colors.black45,
+      Colors.black38,
+      Colors.black26,
+      Colors.black12,
+      Colors.transparent,
+    ],
+  );
+}
+
+void changeStatusBar(
+    {color = Colors.white,
+    StatusBarStyle statusBarStyle = StatusBarStyle.DARK_CONTENT,
+    BuildContext? context}) {
   // 沉浸式的状态栏:
   Brightness brightness = Brightness.dark;
   if (Platform.isIOS) {
-    brightness = (statusBarStyle == StatusBarStyle.LIGHT_CONTENT) ? Brightness.dark : Brightness.light;
+    brightness = (statusBarStyle == StatusBarStyle.LIGHT_CONTENT)
+        ? Brightness.dark
+        : Brightness.light;
   } else {
-    brightness = (statusBarStyle == StatusBarStyle.LIGHT_CONTENT) ? Brightness.light : Brightness.dark;
+    brightness = (statusBarStyle == StatusBarStyle.LIGHT_CONTENT)
+        ? Brightness.light
+        : Brightness.dark;
   }
 
   SystemChrome.setSystemUIOverlayStyle(

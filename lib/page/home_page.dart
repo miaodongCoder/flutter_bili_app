@@ -23,7 +23,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends HiState<HomePage> with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+class _HomePageState extends HiState<HomePage>
+    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   var listener;
   late TabController _controller;
   List<CategoryMo> categoryList = [];
@@ -100,7 +101,10 @@ class _HomePageState extends HiState<HomePage> with AutomaticKeepAliveClientMixi
         controller: _controller,
         isScrollable: true,
         labelColor: Colors.black,
-        indicator: const UnderlineIndicator(strokeCap: StrokeCap.round, borderSide: BorderSide(color: primary, width: 3), insets: EdgeInsets.only(left: 15, right: 15)),
+        indicator: const UnderlineIndicator(
+            strokeCap: StrokeCap.round,
+            borderSide: BorderSide(color: primary, width: 3),
+            insets: EdgeInsets.only(left: 15, right: 15)),
         tabs: categoryList.map<Tab>((category) {
           return Tab(
               child: Padding(
@@ -119,7 +123,8 @@ class _HomePageState extends HiState<HomePage> with AutomaticKeepAliveClientMixi
       HomeMo result = await HomeDao.get('推荐');
       print('loadData: $result');
       if (result.categoryList != null) {
-        _controller = TabController(length: result.categoryList!.length, vsync: this);
+        _controller =
+            TabController(length: result.categoryList!.length, vsync: this);
       }
       setState(() {
         if (result.categoryList != null) {

@@ -6,7 +6,12 @@ class LoadingContainer extends StatelessWidget {
   // 加载动画是否覆盖在原来的界面之上:
   final bool cover;
   final Widget child;
-  const LoadingContainer({Key? key, this.isLoading = false, this.cover = false, required this.child}) : super(key: key);
+  const LoadingContainer(
+      {Key? key,
+      this.isLoading = false,
+      this.cover = false,
+      required this.child})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
