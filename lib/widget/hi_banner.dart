@@ -44,7 +44,7 @@ class HiBanner extends StatelessWidget {
   _image(BannerMo bannerMo) {
     return InkWell(
       onTap: () {
-        print(bannerMo.title);
+        // print(bannerMo.title);
         _handleClicked(bannerMo);
       },
       child: Container(
