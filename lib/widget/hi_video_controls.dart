@@ -246,7 +246,7 @@ class _MaterialControlsState extends State<MaterialControls>
     );
   }
 
-  ///展开按钮
+  /// 全屏展开按钮:
   GestureDetector _buildExpandButton() {
     return GestureDetector(
       onTap: _onExpandCollapse,
@@ -355,8 +355,10 @@ class _MaterialControlsState extends State<MaterialControls>
     }
   }
 
+  /// 点击全屏按钮:
   void _onExpandCollapse() {
     Size size = chewieController.videoPlayerController.value.size;
+    // 播放器在还没有播放的时候酒店及全屏这时候是无法获取宽度的 , 所以在这里做return 操作 , 不允许没播放就全屏:
     if (size.width == 0.0) {
       print('_onExpandCollapse:videoPlayerController.value.size is null.');
       return;

@@ -5,20 +5,17 @@ import 'package:flutter_bili_app/util/color.dart';
 import 'package:flutter_bili_app/util/view_util.dart';
 import 'package:orientation/orientation.dart';
 import 'package:video_player/video_player.dart';
+
 import 'hi_video_controls.dart';
 
+///播放器组件
 class VideoView extends StatefulWidget {
-  // 视频URL:
   final String url;
-  // 视频封面:
   final String cover;
-  // 是否自动播放:
   final bool autoPlay;
-  // 是否循环播放:
   final bool looping;
-  // 视频缩放比例:
   final double aspectRatio;
-  final Widget? overLayUI;
+  final Widget? overlayUI;
 
   const VideoView(
     this.url, {
@@ -27,66 +24,59 @@ class VideoView extends StatefulWidget {
     this.autoPlay = false,
     this.looping = false,
     this.aspectRatio = 16 / 9,
-    this.overLayUI,
+    this.overlayUI,
   }) : super(key: key);
 
   @override
-  State<VideoView> createState() => _VideoViewState();
+  _VideoViewState createState() => _VideoViewState();
 }
 
 class _VideoViewState extends State<VideoView> {
-  // video_player 播放器的控制器:
-  late VideoPlayerController _videoPlayerController;
-  // chewie 播放器的控制器:
-  late ChewieController _chewieController;
+  late VideoPlayerController _videoPlayerController; //video_player播放器Controller
+  late ChewieController _chewieController; //chewie播放器Controller
+  //封面
+  get _placeholder => FractionallySizedBox(
+        widthFactor: 1,
+        child: cachedImage(widget.cover),
+      );
 
-  /// 进度条颜色配置:
-  get _getProgressColors {
-    return ChewieProgressColors(
+  //进度条颜色配置
+  get _progressColors => ChewieProgressColors(
       playedColor: primary,
       handleColor: primary,
       backgroundColor: Colors.grey,
-      // 缓冲状态下的颜色:
-      bufferedColor: primary[50]!,
-    );
-  }
-
-  /// 封面图:
-  get _getVideoCover {
-    return FractionallySizedBox(
-      widthFactor: 1,
-      child: cachedImage(widget.cover),
-    );
-  }
+      bufferedColor: primary[50]!);
 
   @override
   void initState() {
     super.initState();
+    //初始化播放器设置
     _videoPlayerController = VideoPlayerController.network(widget.url);
     _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
-      aspectRatio: widget.aspectRatio,
-      autoPlay: widget.autoPlay,
-      looping: widget.looping,
-      allowMuting: true,
-      placeholder: _getVideoCover,
-      allowPlaybackSpeedChanging: false,
-      customControls: MaterialControls(
-        showLoadingOnInitialize: false,
-        showBigPlayIcon: false,
-        bottomGradient: blackLinearGradient(),
-        overlayUI: widget.overLayUI,
-      ),
-      materialProgressColors: _getProgressColors,
-    );
+        videoPlayerController: _videoPlayerController,
+        aspectRatio: widget.aspectRatio,
+        autoPlay: widget.autoPlay,
+        looping: widget.looping,
+        placeholder: _placeholder,
+        allowMuting: false,
+        allowPlaybackSpeedChanging: false,
+        customControls: MaterialControls(
+          showLoadingOnInitialize: false,
+          showBigPlayIcon: false,
+          bottomGradient: blackLinearGradient(),
+          overlayUI: widget.overlayUI,
+        ),
+        materialProgressColors: _progressColors);
+    //fix iOS无法正常退出全屏播放问题
     _chewieController.addListener(_fullScreenListener);
   }
 
   @override
   void dispose() {
-    super.dispose();
+    _chewieController.removeListener(_fullScreenListener);
     _videoPlayerController.dispose();
     _chewieController.dispose();
+    super.dispose();
   }
 
   @override
@@ -97,7 +87,9 @@ class _VideoViewState extends State<VideoView> {
       width: screenWidth,
       height: playerHeight,
       color: Colors.grey,
-      child: Chewie(controller: _chewieController),
+      child: Chewie(
+        controller: _chewieController,
+      ),
     );
   }
 

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bili_app/widget/navigation_bar.dart';
 
 enum StatusBarStyle { LIGHT_CONTENT, DARK_CONTENT }
 
@@ -36,27 +37,25 @@ blackLinearGradient({bool fromTop = false}) {
   );
 }
 
+///修改状态栏
 void changeStatusBar(
-    {color = Colors.white,
-    StatusBarStyle statusBarStyle = StatusBarStyle.DARK_CONTENT,
+    {color: Colors.white,
+    StatusStyle statusStyle: StatusStyle.DARK_CONTENT,
     BuildContext? context}) {
-  // 沉浸式的状态栏:
-  Brightness brightness = Brightness.dark;
+  //沉浸式状态栏样式
+  var brightness;
   if (Platform.isIOS) {
-    brightness = (statusBarStyle == StatusBarStyle.LIGHT_CONTENT)
+    brightness = statusStyle == StatusStyle.LIGHT_CONTENT
         ? Brightness.dark
         : Brightness.light;
   } else {
-    brightness = (statusBarStyle == StatusBarStyle.LIGHT_CONTENT)
+    brightness = statusStyle == StatusStyle.LIGHT_CONTENT
         ? Brightness.light
         : Brightness.dark;
   }
-
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle.light.copyWith(
-      statusBarColor: Colors.transparent,
-      statusBarBrightness: brightness,
-      statusBarIconBrightness: brightness,
-    ),
-  );
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    statusBarColor: Colors.transparent,
+    statusBarBrightness: brightness,
+    statusBarIconBrightness: brightness,
+  ));
 }
