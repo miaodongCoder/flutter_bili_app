@@ -20,6 +20,7 @@ Widget cachedImage(String imageUrl, {double? width, double? height}) {
   );
 }
 
+/// 线性渐变色:
 blackLinearGradient({bool fromTop = false}) {
   return LinearGradient(
     begin: fromTop ? Alignment.topCenter : Alignment.bottomCenter,

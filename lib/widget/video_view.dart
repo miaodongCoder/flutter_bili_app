@@ -40,13 +40,24 @@ class _VideoViewState extends State<VideoView> {
   // chewie 播放器的控制器:
   late ChewieController _chewieController;
 
-  //进度条颜色配置
-  get _progressColors => ChewieProgressColors(
-        playedColor: primary,
-        handleColor: primary,
-        backgroundColor: Colors.grey,
-        bufferedColor: primary[50]!,
-      );
+  /// 进度条颜色配置:
+  get _getProgressColors {
+    return ChewieProgressColors(
+      playedColor: primary,
+      handleColor: primary,
+      backgroundColor: Colors.grey,
+      // 缓冲状态下的颜色:
+      bufferedColor: primary[50]!,
+    );
+  }
+
+  /// 封面图:
+  get _getVideoCover {
+    return FractionallySizedBox(
+      widthFactor: 1,
+      child: cachedImage(widget.cover),
+    );
+  }
 
   @override
   void initState() {
@@ -57,13 +68,16 @@ class _VideoViewState extends State<VideoView> {
       aspectRatio: widget.aspectRatio,
       autoPlay: widget.autoPlay,
       looping: widget.looping,
+      allowMuting: true,
+      placeholder: _getVideoCover,
+      allowPlaybackSpeedChanging: false,
       customControls: MaterialControls(
         showLoadingOnInitialize: false,
         showBigPlayIcon: false,
         bottomGradient: blackLinearGradient(),
         overlayUI: widget.overLayUI,
       ),
-      materialProgressColors: _progressColors,
+      materialProgressColors: _getProgressColors,
     );
     _chewieController.addListener(_fullScreenListener);
   }
