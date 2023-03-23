@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe, constant_identifier_names, prefer_typing_uninitialized_variables
+
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -39,8 +41,8 @@ blackLinearGradient({bool fromTop = false}) {
 
 ///修改状态栏
 void changeStatusBar(
-    {color: Colors.white,
-    StatusStyle statusStyle: StatusStyle.DARK_CONTENT,
+    {color = Colors.white,
+    StatusStyle statusStyle = StatusStyle.DARK_CONTENT,
     BuildContext? context}) {
   //沉浸式状态栏样式
   var brightness;

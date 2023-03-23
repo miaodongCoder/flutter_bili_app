@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports, depend_on_referenced_packages, no_leading_underscores_for_local_identifiers, unused_element, avoid_print
+
 import 'dart:async';
 
 import 'package:chewie/src/center_play_button.dart';

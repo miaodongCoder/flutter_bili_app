@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, constant_identifier_names, unused_import, import_of_legacy_library_into_null_safe
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/util/view_util.dart';
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';

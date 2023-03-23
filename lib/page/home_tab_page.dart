@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, avoid_unnecessary_containers
+// ignore_for_file: library_private_types_in_public_api, avoid_unnecessary_containers, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/http/core/hi_error.dart';
@@ -158,6 +158,7 @@ class _HomeTabPageState extends State<HomeTabPage>
   }
 
   @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive {
+    return true;
+  }
 }
